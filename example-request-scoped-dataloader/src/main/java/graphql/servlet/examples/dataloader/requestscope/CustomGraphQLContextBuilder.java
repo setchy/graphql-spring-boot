@@ -1,7 +1,9 @@
 package graphql.servlet.examples.dataloader.requestscope;
 
+import graphql.servlet.DefaultGraphQLContext;
 import graphql.servlet.GraphQLContext;
 import graphql.servlet.GraphQLContextBuilder;
+import graphql.servlet.GraphQLHttpContext;
 import org.dataloader.DataLoader;
 import org.dataloader.DataLoaderRegistry;
 import org.springframework.stereotype.Component;
@@ -23,7 +25,7 @@ public class CustomGraphQLContextBuilder implements GraphQLContextBuilder {
 
     @Override
     public GraphQLContext build(HttpServletRequest req, HttpServletResponse response) {
-        GraphQLContext context = new GraphQLContext(req, response);
+        GraphQLContext context = GraphQLHttpContext.create(req, response);
         context.setDataLoaderRegistry(buildDataLoaderRegistry());
 
         return context;
@@ -31,7 +33,7 @@ public class CustomGraphQLContextBuilder implements GraphQLContextBuilder {
 
     @Override
     public GraphQLContext build() {
-        GraphQLContext context = new GraphQLContext();
+        GraphQLContext context = new DefaultGraphQLContext();
         context.setDataLoaderRegistry(buildDataLoaderRegistry());
 
         return context;
@@ -39,7 +41,7 @@ public class CustomGraphQLContextBuilder implements GraphQLContextBuilder {
 
     @Override
     public GraphQLContext build(Session session, HandshakeRequest request) {
-        GraphQLContext context = new GraphQLContext(session, request);
+        GraphQLContext context = GraphQLHttpContext.create(session, request);
         context.setDataLoaderRegistry(buildDataLoaderRegistry());
 
         return context;

@@ -23,24 +23,17 @@ import com.oembedler.moon.graphql.boot.sample.TodoSimpleListConnection;
 import com.oembedler.moon.graphql.boot.sample.schema.objecttype.RootObjectType;
 import com.oembedler.moon.graphql.boot.sample.schema.objecttype.TodoObjectType;
 import com.oembedler.moon.graphql.boot.sample.schema.objecttype.UserObjectType;
-import com.oembedler.moon.graphql.boot.sample.schema.objecttype.RootObjectType;
-import com.oembedler.moon.graphql.boot.sample.schema.objecttype.TodoObjectType;
-import com.oembedler.moon.graphql.boot.sample.schema.objecttype.UserObjectType;
 import com.oembedler.moon.graphql.engine.stereotype.GraphQLDescription;
 import com.oembedler.moon.graphql.engine.stereotype.GraphQLIn;
 import com.oembedler.moon.graphql.engine.stereotype.GraphQLMutation;
 import com.oembedler.moon.graphql.engine.stereotype.GraphQLOut;
 import com.oembedler.moon.graphql.engine.stereotype.GraphQLSchema;
 import com.oembedler.moon.graphql.engine.stereotype.GraphQLSchemaQuery;
-import graphql.servlet.GraphQLContext;
-import org.apache.commons.fileupload.FileItem;
+import graphql.servlet.GraphQLHttpContext;
 
 import javax.servlet.http.Part;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @GraphQLSchema
@@ -155,8 +148,8 @@ public class TodoSchema {
     @GraphQLMutation
     public
     @GraphQLOut("filename")
-    String uploadFile(GraphQLContext graphQLContext) {
-        return graphQLContext.getFiles().orElse(new HashMap<>()).values().stream().flatMap(Collection::stream).map(Part::getName).collect(Collectors.joining(", "));
+    String uploadFile(GraphQLHttpContext graphQLContext) {
+        return graphQLContext.getFileParts().stream().map(Part::getName).collect(Collectors.joining(", "));
     }
 
     @GraphQLMutation
